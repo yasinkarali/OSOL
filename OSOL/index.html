@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Crypto Coins</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h1 {
+            color: #00bcd4;
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 3rem;
+            letter-spacing: 2px;
+        }
+
+        .crypto-card {
+            background: #1f1f1f;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .crypto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .crypto-card h3 {
+            font-size: 1.5rem;
+            color: #00bcd4;
+            font-weight: bold;
+        }
+
+        .crypto-card p {
+            font-size: 1.1rem;
+            color: #e0e0e0;
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #8b949e;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>AI Crypto Coins</h1>
+        <div class="row" id="crypto-container"></div>
+        <div class="footer">Powered by CoinGecko API</div>
+    </div>
+
+    <script>
+        // Coin listesi
+        const coins = [
+            "ai16z", "fartcoin", "grass", "nosana", "griffain", "tars-ai", "ai-rig-complex", "eliza", "alchemist-ai", "memes-ai",
+            "degen-spartan-ai", "dasha", "dolos-the-bully", "kween", "orbit", "fxn", "top-hat", "shoggoth", "agenttank", "deep-worm",
+            "big-pharmai", "bongo-cat", "numogram", "ava-ai", "opus", "obot", "project89", "chaos-and-disorder", "meow", "koala-ai",
+            "kitten-haimer", "pippin", "max", "aimonica-brands", "autonomous-virtual-beings", "forest", "solaris-ai", "synesis-one",
+            "moe", "universal-basic-compute", "mizuki", "naitzsche", "slopfather", "the-lokie-cavbal", "tensor", "arok-vc",
+            "aiwithdaddyissues", "bloomsperg-terminal", "omega", "thales-ai", "keke-terminal", "quasar", "ropirito", "kolin",
+            "kwantxbt", "dither", "duck-ai", "centience", "iq6900", "darksun", "weird-medieval-memes", "yousim", "sensus",
+            "ocada-ai", "singularry", "patchwork-naval", "kira", "kirakuru", "brot", "effective-accelerationism", "cheshire-grin",
+            "limbo", "size", "neroboss", "gmika", "kira", "convo", "sqrfund", "ugly-dog", "gemxbt", "roastmaster9000", "nova-on-mars",
+            "sendor", "flowerai", "dojo-protocol", "internosaur", "devin", "lea-ai", "rex", "aletheia", "mona-arcane", "apicoin",
+            "cyphomancer", "lucy-ai", "agent-rogue"
+        ];
+
+        const container = document.getElementById("crypto-container");
+
+        // Coin fiyatlarını çekme fonksiyonu
+        async function fetchPrices() {
+            try {
+                const response = await fetch(
+                    `https://api.coingecko.com/api/v3/simple/price?ids=${coins.join(",")}&vs_currencies=usd&include_24hr_change=true&localization=false`
+                );
+                const data = await response.json();
+
+                // Mevcut içerikleri temizle
+                container.innerHTML = "";
+
+                coins.forEach((coin) => {
+                    if (data[coin]) {
+                        const price = data[coin].usd || "N/A";
+                        const change = data[coin].usd_24h_change || 0;
+
+                        const card = `
+                            <div class="col-md-3 col-sm-6">
+                                <div class="crypto-card">
+                                    <h3>${coin.toUpperCase()}</h3>
+                                    <p>$${price}</p>
+                                    <p class="${change > 0 ? 'text-success' : 'text-danger'}">24h Change: ${change.toFixed(2)}%</p>
+                                </div>
+                            </div>
+                        `;
+                        container.innerHTML += card;
+                    }
+                });
+            } catch (error) {
+                console.error("Error fetching prices:", error);
+                container.innerHTML = `<p class="text-danger">Unable to load prices. Please try again later.</p>`;
+            }
+        }
+
+        // Sayfayı ilk kez yükle
+        fetchPrices();
+    </script>
+</body>
+
+</html>
